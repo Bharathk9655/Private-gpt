@@ -1,73 +1,199 @@
-# PrivateGPT 
+# Private-GPT with Ollama
 
-<a href="https://trendshift.io/repositories/2601" target="_blank"><img src="https://trendshift.io/api/badge/repositories/2601" alt="imartinez%2FprivateGPT | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+Private-GPT is a privacy-first AI assistant that enables users to interact with Large Language Models (LLMs) entirely on their local machine. Built with Python, FastAPI, Gradio, and Ollama, the application supports Retrieval-Augmented Generation (RAG), semantic search, document summarization, and conversational AI without sending sensitive data to external servers.
 
+---
 
-PrivateGPT is a production-ready AI project that allows you to ask questions about your documents using the power
-of Large Language Models (LLMs), even in scenarios without an Internet connection. 100% private, no data leaves your
-execution environment at any point.
+## Features
 
+- Local AI model execution using Ollama
+- Retrieval-Augmented Generation (RAG)
+- Semantic document search
+- AI-powered document summarization
+- Interactive chat interface
+- Multiple file upload support
+- FastAPI backend with Gradio frontend
+- Support for Llama and Gemma models
 
-The project provides an API offering all the primitives required to build private, context-aware AI applications.
-It follows and extends the [OpenAI API standard](https://openai.com/blog/openai-api),
-and supports both normal and streaming responses.
+---
 
-The API is divided into two logical blocks:
+## Technology Stack
 
-**High-level API**, which abstracts all the complexity of a RAG (Retrieval Augmented Generation)
-pipeline implementation:
-- Ingestion of documents: internally managing document parsing,
-splitting, metadata extraction, embedding generation and storage.
-- Chat & Completions using context from ingested documents:
-abstracting the retrieval of context, the prompt engineering and the response generation.
+**Backend**
+- Python
+- FastAPI
+- Uvicorn
 
-**Low-level API**, which allows advanced users to implement their own complex pipelines:
-- Embeddings generation: based on a piece of text.
-- Contextual chunks retrieval: given a query, returns the most relevant chunks of text from the ingested documents.
+**Frontend**
+- Gradio
 
-In addition to this, a working [Gradio UI](https://www.gradio.app/)
-client is provided to test the API, together with a set of useful tools such as bulk model
-download script, ingestion script, documents folder watch, etc.
+**AI & ML**
+- Ollama
+- Llama
+- Gemma
+- PyTorch
+- Embedding Models
 
+**Libraries**
+- Pandas
+- NumPy
+- HTTPX
 
-### Motivation behind PrivateGPT
-Generative AI is a game changer for our society, but adoption in companies of all sizes and data-sensitive
-domains like healthcare or legal is limited by a clear concern: **privacy**.
-Not being able to ensure that your data is fully under your control when using third-party AI tools
-is a risk those industries cannot take.
+---
 
+## Project Structure
 
-### Present and Future of PrivateGPT
-PrivateGPT is now evolving towards becoming a gateway to generative AI models and primitives, including
-completions, document ingestion, RAG pipelines and other low-level building blocks.
-We want to make it easier for any developer to build AI applications and experiences, as well as provide
-a suitable extensive architecture for the community to keep contributing.
+```
+private-gpt/
+│
+├── private_gpt/
+├── uploads/
+├── embeddings/
+├── requirements.txt
+├── README.md
+└── main.py
+```
 
+---
 
-## 🧩 Architecture
-Conceptually, PrivateGPT is an API that wraps a RAG pipeline and exposes its
-primitives.
-* The API is built using [FastAPI](https://fastapi.tiangolo.com/) and follows
-  [OpenAI's API scheme](https://platform.openai.com/docs/api-reference).
-* The RAG pipeline is based on [LlamaIndex](https://www.llamaindex.ai/).
+## Installation
 
-The design of PrivateGPT allows to easily extend and adapt both the API and the
-RAG implementation. Some key architectural decisions are:
-* Dependency Injection, decoupling the different components and layers.
-* Usage of LlamaIndex abstractions such as `LLM`, `BaseEmbedding` or `VectorStore`,
-  making it immediate to change the actual implementations of those abstractions.
-* Simplicity, adding as few layers and new abstractions as possible.
-* Ready to use, providing a full implementation of the API and RAG
-  pipeline.
+Clone the repository
 
-Main building blocks:
-* APIs are defined in `private_gpt:server:<api>`. Each package contains an
-  `<api>_router.py` (FastAPI layer) and an `<api>_service.py` (the
-  service implementation). Each *Service* uses LlamaIndex base abstractions instead
-  of specific implementations,
-  decoupling the actual implementation from its usage.
-* Components are placed in
-  `private_gpt:components:<component>`. Each *Component* is in charge of providing
-  actual implementations to the base abstractions used in the Services - for example
-  `LLMComponent` is in charge of providing an actual implementation of an `LLM`
-  (for example `LlamaCPP` or `OpenAI`).
+```bash
+git clone https://github.com/yourusername/private-gpt.git
+cd private-gpt
+```
+
+Create a virtual environment
+
+```bash
+python -m venv venv
+```
+
+Activate the environment
+
+**Windows**
+
+```bash
+venv\Scripts\activate
+```
+
+**Linux / macOS**
+
+```bash
+source venv/bin/activate
+```
+
+Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Install Ollama
+
+Download Ollama from:
+
+https://ollama.com
+
+Pull the required model:
+
+```bash
+ollama pull llama3.2:3b-instruct-q4_K_M
+```
+
+or
+
+```bash
+ollama pull gemma3:1b
+```
+
+Verify installation
+
+```bash
+ollama list
+```
+
+---
+
+## Run the Application
+
+```bash
+python -m poetry run python -m private_gpt
+```
+
+Open the application in your browser:
+
+```
+http://127.0.0.1:8001
+```
+
+---
+
+## Application Workflow
+
+```
+User
+   │
+   ▼
+Gradio Interface
+   │
+   ▼
+FastAPI Backend
+   │
+   ▼
+Ollama Model
+   │
+   ▼
+Embedding Engine
+   │
+   ▼
+RAG Pipeline
+   │
+   ▼
+AI Response
+```
+
+---
+
+## Supported Modes
+
+- **RAG** – Context-aware question answering using uploaded documents
+- **Search** – Semantic search across uploaded files
+- **Basic Chat** – General conversation with the selected LLM
+- **Summarize** – Generate summaries from uploaded documents
+
+---
+
+## Use Cases
+
+- Enterprise Knowledge Assistant
+- Internal Documentation Search
+- Research Assistant
+- HR and Policy Assistant
+- Legal Document Analysis
+- Secure AI Chatbot
+
+---
+
+## Skills Demonstrated
+
+- Generative AI
+- Retrieval-Augmented Generation (RAG)
+- Ollama
+- FastAPI
+- Python
+- Prompt Engineering
+- Semantic Search
+- Embedding Models
+- Local LLM Deployment
+- Gradio
+
+---
+
+## License
+
+This project is intended for educational and research purposes.
